@@ -74,7 +74,13 @@ echo ">> Turn PHP errors on"
 sudo sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php5/apache2/php.ini
 sudo sed -i "s/display_errors = .*/display_errors = On/" /etc/php5/apache2/php.ini
 
-echo ">> Restart apache"
+echo ">> Restart Apache"
 sudo service apache2 restart > /dev/null 2>&1
+
+echo ">> Allow MongoDB remote access"
+sudo sed -i "s/bind_ip.*/#bind_ip = 127.0.0.1/" /etc/mongodb.conf
+
+echo ">> Restart MongoDB"
+sudo service mongodb restart > /dev/null 2>&1
 
 echo "--- Setup complete ---"
