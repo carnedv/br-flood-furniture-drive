@@ -1,0 +1,80 @@
+{% extends "template.html" %}
+
+{% block content %}
+	<h2>Donation Requests</h2>
+    <div class="row" style="margin-bottom:30px;">
+        <div class="col-sm-6">
+          <button type="button" class="btn btn-primary">All</button>
+          <button type="button" class="btn btn-success">Open</button>
+          <button type="button" class="btn btn-danger">Closed</button>
+        </div>
+        <div class="input-group col-sm-6">
+            <input type="text" class="search-query form-control" placeholder="Search" ng-model="searchText" />
+            <span class="input-group-btn">
+                <button class="btn btn-danger" type="button" ng-click="clearSearchText()">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+            </span>
+        </div>
+    </div>
+    <table class="table table-striped" ts-wrapper>
+        <thead>
+            <tr>
+                <th ts-criteria="priority" ts-default>Priority #</th>
+                <th ts-criteria="name|lowercase">Name</th>
+                <th>Phone #</th>
+                <th class="hidden-sm">Item 1</th>
+                <th class="hidden-sm">Item 2</th>
+                <th class="hidden-sm">Item 3</th>
+                <th class="hidden-sm">Item 4</th>
+                <th class="hidden-sm">Item 5</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="req in furnitureRequests | filter:searchText" ts-repeat>
+                <th class="col-xs-2" scope="row">[[ req.priority ]]</th>
+                <td class="col-xs-3">[[ req.name ]]</td>
+                <td class="col-xs-3">[[ req.phone ]]</td>
+                <td class="hidden-sm" ng-click="openItemModal(req.item1)">[[ req.item1 ]]</td>
+                <td class="hidden-sm" ng-click="openItemModal(req.item2)">[[ req.item2 ]]</td>
+                <td class="hidden-sm" ng-click="openItemModal(req.item3)">[[ req.item3 ]]</td>
+                <td class="hidden-sm" ng-click="openItemModal(req.item4)">[[ req.item4 ]]</td>
+                <td class="hidden-sm" ng-click="openItemModal(req.item5)">[[ req.item5 ]]</td>
+                <td class="col-xs-2">
+                	<button class="btn btn-md" ng-click="openRequestDetailModal(req)"><span class="glyphicon glyphicon-zoom-in"></span></button>
+                	<button class="btn btn-md"><span class="glyphicon glyphicon-remove"></span></button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script type="text/ng-template" id="itemModalContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title" id="modal-title">Item</h3>
+        </div>
+        <div class="modal-body" id="modal-body">
+            <div>
+                <button class="btn btn-sm"><span class="glyphicon glyphicon-share-alt"></span></button>
+                <button class="btn btn-sm"><span class="glyphicon glyphicon glyphicon-ok"></span></button>
+                <button class="btn btn-sm"><span class="glyphicon glyphicon-ban-circle"></span></button>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+        </div>
+    </script>
+
+    <script type="text/ng-template" id="requestDetailModalContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title" id="modal-title">Request</h3>
+        </div>
+        <div class="modal-body" id="modal-body">
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+        </div>
+    </script>
+{% endblock %}

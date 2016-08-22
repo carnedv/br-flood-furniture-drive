@@ -1,0 +1,11 @@
+{
+  "name": "furniture-flood-drive",
+  "private": true,
+  "dependencies": {
+    "bootstrap-sass-official": "~3.3.0",
+    "angular": "1.5.9-build.4997+sha.8df4367",
+    "angular-bootstrap": "^2.1.0",
+    "angular-tablesort": "^1.1.2"
+  },
+  "devDependencies": {}
+}

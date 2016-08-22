@@ -1,0 +1,4 @@
+vendor/
+public_html/assets/js/bower-components/
+.vagrant/
+data-import/
