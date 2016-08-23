@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-sudo hostname flood-furniture-drive-dev
+sudo hostname br-flood-furniture-drive-dev
 
 echo "--- Installing applications and setting them up ---"
 
