@@ -65,7 +65,7 @@ sudo a2enmod rewrite > /dev/null 2>&1
 
 echo ">> Setting up document root"
 sudo rm -rf /var/www/html > /dev/null 2>&1
-sudo ln -fs /vagrant /var/www/flood-furniture-drive > /dev/null 2>&1
+sudo ln -fs /vagrant /var/www/br-flood-furniture-drive > /dev/null 2>&1
 
 echo ">> Copying Apache config file"
 sudo cp /vagrant/vagrant_bootstrap/config-files/000-default.conf /etc/apache2/sites-available/000-default.conf
