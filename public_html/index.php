@@ -28,8 +28,8 @@
 	    return $view;
 	};
 
-	$app->get('/', function (Request $request, Response $response) {
-	    return $this->view->render($response, 'home/index.html', []);
+	$app->get('/admin/index', function (Request $request, Response $response) {
+	    return $this->view->render($response, 'admin/home/index.html', []);
 	});
 
 	$app->get('/api/donation-requests/list', function (Request $request, Response $response) {
