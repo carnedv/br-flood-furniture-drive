@@ -4,9 +4,11 @@
 
 	require '../vendor/autoload.php';
 
+    $hybrid_auth = new Hybrid_Auth('../app/config/hybrid-auth.php');
+
 	$configuration = [
 	    'settings' => [
-	        'displayErrorDetails' => true,
+	        'displayErrorDetails' => true
 	    ],
 	];
 
@@ -28,7 +30,13 @@
 	    return $view;
 	};
 
-	$app->get('/admin/index', function (Request $request, Response $response) {
+    $app->get('/', function (Request $request, Response $response) {
+        return $this->view->render($response, 'home/index.html', []);
+    });
+
+	$app->get('/admin/index', function (Request $request, Response $response) use ($hybrid_auth) {
+        $adapter = $hybrid_auth->authenticate( "Google" );
+        die(json_encode($adapter->getUserProfile()));
 	    return $this->view->render($response, 'admin/home/index.html', []);
 	});
 
@@ -47,5 +55,9 @@
 
 		return $response->withJson($result);
 	});
+
+    $app->get('/auth', function(Request $request, Response $response) {
+        Hybrid_Endpoint::process();
+    });
 
 	$app->run();
