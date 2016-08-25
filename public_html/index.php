@@ -60,4 +60,9 @@
         Hybrid_Endpoint::process();
     });
 
+    $app->get('/auth/logout', function(Request $request, Response $response) use ($app, $hybrid_auth) {
+        $hybrid_auth->logoutAllProviders();
+        return $response->withHeader('Location', '/');
+    });
+
 	$app->run();
