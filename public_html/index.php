@@ -5,11 +5,12 @@
 	require '../vendor/autoload.php';
 
     $hybrid_auth = new Hybrid_Auth('../app/config/hybrid-auth.php');
+    $mongo_db = new MongoDB\Client("mongodb://localhost:27017");
 
 	$configuration = [
 	    'settings' => [
 	        'displayErrorDetails' => true
-	    ],
+	    ]
 	];
 
 	$app = new \Slim\App($configuration);
@@ -34,15 +35,14 @@
         return $this->view->render($response, 'home/index.html', []);
     });
 
-	$app->get('/admin/index', function (Request $request, Response $response) use ($hybrid_auth) {
-        $adapter = $hybrid_auth->authenticate( "Google" );
-        die(json_encode($adapter->getUserProfile()));
-	    return $this->view->render($response, 'admin/home/index.html', []);
+	$app->get('/admin/', function (Request $request, Response $response) use ($hybrid_auth) {
+        $auth = $hybrid_auth->authenticate( "Google" );
+        $user = $auth->getUserProfile();
+	    return $this->view->render($response, 'admin/home/index.html');
 	});
 
-	$app->get('/api/donation-requests/list', function (Request $request, Response $response) {
-	    $client = new MongoDB\Client("mongodb://localhost:27017");
-		$collection = $client->ffd->furniture_requests;
+	$app->get('/api/donation-requests/list', function (Request $request, Response $response) use ($mongo_db) {
+		$collection = $mongo_db->ffd->furniture_requests;
 		$cursor = $collection->find([],
 	    [
 	        'sort' => ['priority' => 1],
