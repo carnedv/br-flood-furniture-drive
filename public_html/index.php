@@ -4,16 +4,13 @@
 
 	require '../vendor/autoload.php';
 
-    $hybrid_auth = new Hybrid_Auth('../app/config/hybrid-auth.php');
-    $mongo_db = new MongoDB\Client("mongodb://localhost:27017");
-
-	$configuration = [
+	$slim_config = [
 	    'settings' => [
 	        'displayErrorDetails' => true
 	    ]
 	];
 
-	$app = new \Slim\App($configuration);
+	$app = new \Slim\App($slim_config);
 
 	// Get container
 	$container = $app->getContainer();
@@ -31,18 +28,26 @@
 	    return $view;
 	};
 
+	$container['hybrid_auth'] = function($container) {
+	    return new Hybrid_Auth('../app/config/hybrid-auth.php');
+    };
+
+    $container['mongo_db'] = function($container) {
+        return new Hybrid_Auth('../app/config/hybrid-auth.php');
+    };
+
     $app->get('/', function (Request $request, Response $response) {
         return $this->view->render($response, 'home/index.html', []);
     });
 
-	$app->get('/admin/', function (Request $request, Response $response) use ($hybrid_auth) {
-        $auth = $hybrid_auth->authenticate( "Google" );
+	$app->get('/admin[/]', function (Request $request, Response $response) {
+        $auth = $this->hybrid_auth->authenticate( "Google" );
         $user = $auth->getUserProfile();
 	    return $this->view->render($response, 'admin/home/index.html');
 	});
 
-	$app->get('/api/donation-requests/list', function (Request $request, Response $response) use ($mongo_db) {
-		$collection = $mongo_db->ffd->furniture_requests;
+	$app->get('/api/donation-requests/list', function (Request $request, Response $response) {
+		$collection = $this->mongo_db->ffd->furniture_requests;
 		$cursor = $collection->find([],
 	    [
 	        'sort' => ['priority' => 1],
@@ -60,8 +65,8 @@
         Hybrid_Endpoint::process();
     });
 
-    $app->get('/auth/logout', function(Request $request, Response $response) use ($app, $hybrid_auth) {
-        $hybrid_auth->logoutAllProviders();
+    $app->get('/auth/logout', function(Request $request, Response $response) {
+        $this->hybrid_auth->logoutAllProviders();
         return $response->withHeader('Location', '/');
     });
 
